@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <string>
 
 using namespace std;
 
@@ -92,16 +93,26 @@ private:
 
     // Processes a player's move
     void playerMove(char currentPlayer) {
+        string rowS, colS;
         int row, col;
         while (true) {
-            cout << "Player " << currentPlayer << ", enter row and column (1-3): ";
-            cin >> row >> col;
-            row--; col--; // Convert to 0-based indexing
-            if (isValidMove(row, col)) {
-                board[row][col] = currentPlayer;
-                break;
+            try
+            {
+                cout << "Player " << currentPlayer << ", enter row and column (1-3): ";
+                cin >> rowS >> colS;
+                row = stoi(rowS);
+                col = stoi(colS);
+                row--; col--; // Convert to 0-based indexing
+                if (isValidMove(row, col)) {
+                    board[row][col] = currentPlayer;
+                    break;
+                }
+                else {
+                    cout << "Invalid move, try again.\n";
+                }
             }
-            else {
+            catch (const std::exception&)
+            {
                 cout << "Invalid move, try again.\n";
             }
         }
