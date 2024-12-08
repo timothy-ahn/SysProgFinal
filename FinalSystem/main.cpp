@@ -6,13 +6,14 @@
 using namespace std;
 
 class TicTacToe {
-    vector<vector<char>> board;
-    char playerSymbol, computerSymbol;
-    int playerScore, computerScore;
+    vector<vector<char>> board; // 3x3 game board
+    char playerSymbol, computerSymbol; // Symbols for player and computer
+    int playerScore, computerScore; // Score counters
 
 public:
     TicTacToe() : board(3, vector<char>(3, ' ')), playerScore(0), computerScore(0) {}
 
+    // Main function to control the game flow
     void playGame() {
         while (true) {
             clearConsole();
@@ -26,10 +27,12 @@ public:
     }
 
 private:
+    // Resets the game board to an empty state
     void resetBoard() {
         for (auto& row : board) row.assign(3, ' ');
     }
 
+    // Displays the current game board
     void displayBoard() {
         cout << "\n  1 2 3\n";
         for (int i = 0; i < 3; i++) {
@@ -43,17 +46,20 @@ private:
         }
     }
 
-    void displayScores() const {
+    // Displays the scores of the player and the computer
+    void displayScores() {
         cout << "Scores:\nPlayer: " << playerScore << " | Computer: " << computerScore << "\n\n";
     }
 
+    // Lets the player choose between playing with another player or the computer
     bool chooseOpponent() {
         cout << "Choose opponent:\n1. Another Player\n2. Computer\nEnter choice (1/2): ";
         int choice;
         cin >> choice;
-        return choice == 2;
+        return choice == 2; // Returns true if computer is selected
     }
 
+    // Handles a single round of the game
     char playRound(bool againstComputer) {
         char currentPlayer = 'X';
         playerSymbol = 'X';
@@ -80,16 +86,17 @@ private:
                 cout << "It's a draw!\n";
                 return 'D';
             }
-            currentPlayer = togglePlayer(currentPlayer);
+            currentPlayer = togglePlayer(currentPlayer); // Switch to the other player
         }
     }
 
+    // Processes a player's move
     void playerMove(char currentPlayer) {
         int row, col;
         while (true) {
             cout << "Player " << currentPlayer << ", enter row and column (1-3): ";
             cin >> row >> col;
-            row--; col--;
+            row--; col--; // Convert to 0-based indexing
             if (isValidMove(row, col)) {
                 board[row][col] = currentPlayer;
                 break;
@@ -100,6 +107,7 @@ private:
         }
     }
 
+    // Makes a move for the computer
     void computerMove() {
         srand(time(0));
         int row, col;
@@ -114,14 +122,17 @@ private:
         cout << "Computer made its move.\n";
     }
 
+    // Toggles the current player
     char togglePlayer(char currentPlayer) {
         return currentPlayer == 'X' ? 'O' : 'X';
     }
 
+    // Checks if a move is valid
     bool isValidMove(int row, int col) {
         return row >= 0 && row < 3 && col >= 0 && col < 3 && board[row][col] == ' ';
     }
 
+    // Checks if the current player has won
     bool checkWin(char player) {
         for (int i = 0; i < 3; i++) {
             if (board[i][0] == player && board[i][1] == player && board[i][2] == player) return true;
@@ -132,6 +143,7 @@ private:
         return false;
     }
 
+    // Checks if the game is a draw
     bool isDraw() {
         for (const auto& row : board)
             for (char cell : row)
@@ -139,11 +151,13 @@ private:
         return true;
     }
 
+    // Updates the scores based on the winner
     void updateScores(char winner) {
         if (winner == playerSymbol) playerScore++;
         if (winner == computerSymbol) computerScore++;
     }
 
+    // Asks the player if they want to restart the game
     bool askToRestart() {
         cout << "Do you want to play again? (y/n): ";
         char choice;
@@ -151,17 +165,18 @@ private:
         return choice == 'y';
     }
 
+    // Clears the console for a cleaner display
     void clearConsole() {
 #ifdef _WIN32
-        system("cls");
+        system("cls"); // Windows
 #else
-        system("clear");
+        system("clear"); // Unix-based systems
 #endif
     }
 };
 
 int main() {
     TicTacToe game;
-    game.playGame();
+    game.playGame(); // Start the game
     return 0;
 }
